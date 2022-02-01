@@ -8,10 +8,9 @@ check_code_style:
   stage: test
   image: node:16.13.0
   script:
-    - echo "Code style" # TODO: remove debug
-#    - npm ci -ws
-#    - npm run lint -w packages/ce
-#    - npm run lint -w packages/platform
+    - npm ci -ws
+    - npm run lint -w packages/ce
+    - npm run lint -w packages/platform
 
 include:
   - local: 'web/packages/ce/.gitlab-ci.yml'
