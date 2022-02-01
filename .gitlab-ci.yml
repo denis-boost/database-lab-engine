@@ -1,7 +1,9 @@
 image: golang:1.17
 
 include:
-  - template: Security/SAST.gitlab-ci.yml
+#  - template: Security/SAST.gitlab-ci.yml
+  - local: 'web/packages/ce/.gitlab-ci.yml'
+  - local: 'web/packages/platform/.gitlab-ci.yml'
 
 variables:
   SAST_EXCLUDED_ANALYZERS: "semgrep-sast"
@@ -10,8 +12,9 @@ variables:
 stages:
   - test
   - build-binary
-  - build-image
+  - build
   - integration-test
+  - deploy
 
 test:
   stage: test
@@ -23,27 +26,31 @@ lint:
   script:
     - make lint
 
-.only_var_template: &only_tag_release
+
+## Conditions
+.only_dle_tag_release: &only_tag_release
   only:
     variables:
       - $CI_COMMIT_TAG =~ /^v[0-9.]+$/
 
-.only_var_template: &only_tag_rc
+.only_dle_tag_rc: &only_tag_rc
   only:
     variables:
       - $CI_COMMIT_TAG =~ /^v[0-9.]+[\-_]*[a-zA-Z]+[a-zA-Z0-9.\-_]*[a-zA-Z0-9]+$/
 
-.only_var_template: &only_master
+.only_dle_master: &only_master
   only:
     - master
 
-.only_var_template: &only_feature
+.only_dle_feature: &only_feature
   only:
     refs:
       - branches
     variables:
       - $CI_COMMIT_REF_SLUG != "master"
 
+
+### Build binary.
 build-binary-alpine:
   image: golang:1.17-alpine
   stage: build-binary
@@ -125,7 +132,7 @@ build-binary-client-rc:
 
 .job_template: &build_image_definition
   image: docker:19
-  stage: build-image
+  stage: build
   artifacts:
     paths:
       - bin

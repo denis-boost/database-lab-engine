@@ -3,7 +3,13 @@ stages:
   - build
   - deploy
 
+.only_web: &only_web
+  rules:
+    - changes:
+        - web/**/*
+
 check_code_style:
+  <<: *only_web
   stage: test
   image: node:16.13.0
   script:
