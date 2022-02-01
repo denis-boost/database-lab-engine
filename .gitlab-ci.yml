@@ -359,20 +359,20 @@ build-image-swagger-latest:
   stage: integration-test
   variables:
     IMAGE_TAG: "${CI_COMMIT_REF_SLUG}"
-  only:
-    refs:
-      - branches
-    variables:
-      - $CI_COMMIT_REF_SLUG != "master"
-    changes:
-      - cmd/**/*
-      - configs/**/*
-      - internal/**/*
-      - pkg/**/*
-      - test/**/*
-      - Dockerfile.*
-      - go.*
-      - .gitlab-ci.yml
+  rules:
+    - changes:
+        - web/**/*
+      when: never
+    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
+      changes:
+        - cmd/**/*
+        - configs/**/*
+        - internal/**/*
+        - pkg/**/*
+        - test/**/*
+        - Dockerfile.*
+        - go.*
+        - .gitlab-ci.yml
   script:
     - bash test/1.synthetic.sh
     - bash test/2.logical_generic.sh
