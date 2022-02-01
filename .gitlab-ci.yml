@@ -58,7 +58,7 @@ lint:
 ### Build binary.
 build-binary-alpine:
   rules:
-    - !reference [.except_web_rules, .only_dle_tag_release, .only_dle_tag_rc, rules]
+    - !reference [.except_web_rules, .only_tag_release, .only_tag_rc, rules]
   image: golang:1.17-alpine
   stage: build-binary
   artifacts:
