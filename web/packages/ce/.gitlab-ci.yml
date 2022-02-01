@@ -30,7 +30,7 @@ build_basic_image_release:
     REGISTRY_PASSWORD: "${DH_CI_REGISTRY_PASSWORD}"
     REGISTRY: "${DH_CI_REGISTRY}"
     DOCKER_NAME: "postgresai/ce-ui"
-    TAGS: "${DOCKER_NAME}:${CI_COMMIT_TAG#"web/"},${DOCKER_NAME}:latest"
+    TAGS: '${DOCKER_NAME}:${CI_COMMIT_TAG#"web/"},${DOCKER_NAME}:latest'
 
 build_basic_image_dev:
   <<: *build_definition
@@ -40,7 +40,7 @@ build_basic_image_dev:
     REGISTRY_PASSWORD: "${CI_REGISTRY_PASSWORD}"
     REGISTRY: "${CI_REGISTRY}"
     DOCKER_NAME: "registry.gitlab.com/postgres-ai/database-lab/ce-ui"
-    TAGS: "${DOCKER_NAME}:${CI_COMMIT_REF_SLUG},${DOCKER_NAME}:${CLEAN_TAG#"web/"}" # TODO: remove debug
+    TAGS: '${DOCKER_NAME}:${CI_COMMIT_REF_SLUG},${DOCKER_NAME}:${CLEAN_TAG#"web/"}' # TODO: remove debug
   before_script: # TODO: remove debug
     - export CLEAN_TAG=web/0.0.1 # TODO: remove debug
   when: manual
