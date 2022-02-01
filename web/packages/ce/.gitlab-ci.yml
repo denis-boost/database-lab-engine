@@ -35,7 +35,8 @@ build_basic_image_release:
 
 build_basic_image_dev:
   <<: *build_definition
-  <<: *only_web_feature
+#  <<: *only_web_feature
+  <<: *only_web_tag_release
   variables:
     REGISTRY_USER: "${CI_REGISTRY_USER}"
     REGISTRY_PASSWORD: "${CI_REGISTRY_PASSWORD}"
