@@ -77,12 +77,14 @@ stages:
 .only_web_staging: &only_web_staging
   rules:
     - !reference [.only_web, rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
+      when: never
 
 .only_web_feature: &only_web_feature
   rules:
     - !reference [.only_web, rules]
-    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: never
   when: manual
 
 # Jobs.
