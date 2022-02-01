@@ -49,6 +49,8 @@ stages:
     - docker:dind
   script:
     - echo Build ${TAGS} # TODO: remove debug
+    - echo Commit branch ${CI_COMMIT_BRANCH}
+    - echo Default branch ${CI_DEFAULT_BRANCH}
 #    - apk add --no-cache bash
 #    - bash ./packages/platform/ci_docker_build_push.sh
 
