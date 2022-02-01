@@ -2,8 +2,9 @@ image: golang:1.17
 
 include:
 #  - template: Security/SAST.gitlab-ci.yml
-  - local: 'web/packages/ce/.gitlab-ci.yml'
-  - local: 'web/packages/platform/.gitlab-ci.yml'
+  - local: 'web/.gitlab-ci.yml'
+#  - local: 'web/packages/ce/.gitlab-ci.yml'
+#  - local: 'web/packages/platform/.gitlab-ci.yml'
 
 variables:
   SAST_EXCLUDED_ANALYZERS: "semgrep-sast"
