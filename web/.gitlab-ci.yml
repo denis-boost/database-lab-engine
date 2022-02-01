@@ -8,9 +8,9 @@ check_code_style:
   stage: test
   image: node:16.13.0
   script:
-    - npm ci -ws
-    - npm run lint -w packages/ce
-    - npm run lint -w packages/platform
+    - npm --prefix web/ ci -ws
+    - npm --prefix web/ run lint -w packages/ce
+    - npm --prefix web/ run lint -w packages/platform
 
 include:
   - local: 'web/packages/ce/.gitlab-ci.yml'
