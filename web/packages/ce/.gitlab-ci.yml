@@ -19,8 +19,8 @@ stages:
     - docker:dind
   script:
     - echo ${TAGS} # TODO: remove debug
-#    - apk add --no-cache bash
-#    - bash ./packages/ce/ci_docker_build_push.sh
+    - apk add --no-cache bash
+    - bash ./packages/ce/ci_docker_build_push.sh
 
 # Jobs.
 build_basic_image_release:
@@ -42,7 +42,5 @@ build_basic_image_dev:
     REGISTRY_PASSWORD: "${CI_REGISTRY_PASSWORD}"
     REGISTRY: "${CI_REGISTRY}"
     DOCKER_NAME: "registry.gitlab.com/postgres-ai/database-lab/ce-ui"
-    TAGS: '${DOCKER_NAME}:${CI_COMMIT_REF_SLUG},${DOCKER_NAME}:${CLEAN_TAG#"web/"}' # TODO: remove debug
-  before_script: #  TODO: remove debug
-    - export CLEAN_TAG=web/0.0.1 # TODO: remove debug
+    TAGS: '${DOCKER_NAME}:${CI_COMMIT_REF_SLUG},${DOCKER_NAME}:${CI_COMMIT_TAG#"web/"}' # TODO: remove debug
   when: manual
