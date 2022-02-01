@@ -18,8 +18,9 @@ stages:
   services:
     - docker:dind
   script:
-    - apk add --no-cache bash
-    - bash ./packages/ce/ci_docker_build_push.sh
+    - echo ${TAGS} # TODO: remove debug
+#    - apk add --no-cache bash
+#    - bash ./packages/ce/ci_docker_build_push.sh
 
 # Jobs.
 build_basic_image_release:

@@ -48,72 +48,74 @@ stages:
   services:
     - docker:dind
   script:
-    - apk add --no-cache bash
-    - bash ./packages/platform/ci_docker_build_push.sh
+    - echo Build ${TAGS} # TODO: remove debug
+#    - apk add --no-cache bash
+#    - bash ./packages/platform/ci_docker_build_push.sh
 
 .job_template: &deploy_definition
   stage: deploy
   image: dtzar/helm-kubectl:2.14.1
   script:
+    - echo Deploy ${TAGS} # TODO: remove debug
     # Substitute env variables in deploy config.
-    - bash ./packages/platform/do.sh subs_envs ./packages/platform/deploy/platform-console.yaml /tmp/platform-console.yaml
+#    - bash ./packages/platform/do.sh subs_envs ./packages/platform/deploy/platform-console.yaml /tmp/platform-console.yaml
     # Deploy to k8s cluster.
-    - kubectl apply --filename /tmp/platform-console.yaml -n $NAMESPACE
+#    - kubectl apply --filename /tmp/platform-console.yaml -n $NAMESPACE
 
 # Conditions.
-.only_var_template: &only_tag_release
-  only:
-    variables:
-      - $CI_COMMIT_TAG =~ /^[0-9.]+$/
+.only_web:
+  rules:
+    - changes:
+        - web/**/*
 
-.only_var_template: &only_staging
-  only:
-    refs:
-      - branches
-    variables:
-      - $CI_COMMIT_REF_SLUG == "master"
+.only_web_tag_release: &only_web_tag_release
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^web\/[0-9.]+$/
 
-.only_var_template: &only_feature
-  only:
-    refs:
-      - branches
-    variables:
-      - $CI_COMMIT_REF_SLUG != "master"
+.only_web_staging: &only_web_staging
+  rules:
+    - !reference [.only_web, rules]
+    - if: '$CI_COMMIT_REF_SLUG == $CI_DEFAULT_BRANCH'
+
+.only_web_feature: &only_web_feature
+  rules:
+    - !reference [.only_web, rules]
+    - if: '$CI_COMMIT_REF_SLUG != $CI_DEFAULT_BRANCH'
   when: manual
 
 # Jobs.
 # Production.
 build_cloud_image_tag_release:
   <<: *env_production
-  <<: *only_tag_release
+  <<: *only_web_tag_release
   <<: *build_definition
 
 deploy_cloud_image_tag_release:
   <<: *env_production
-  <<: *only_tag_release
+  <<: *only_web_tag_release
   <<: *deploy_definition
 
 # Staging.
 build_cloud_image_staging:
   <<: *env_staging
-  <<: *only_staging
+  <<: *only_web_staging
   <<: *build_definition
 
 deploy_cloud_image_staging:
   <<: *env_staging
-  <<: *only_staging
+  <<: *only_web_staging
   <<: *deploy_definition
 
 # Dev.
 build_cloud_image_dev:
   <<: *env_dev
-  <<: *only_feature
+  <<: *only_web_feature
   <<: *build_definition
   when: manual
   allow_failure: false
 
 deploy_cloud_image_dev:
   <<: *env_dev
-  <<: *only_feature
+  <<: *only_web_feature
   <<: *deploy_definition
   when: manual
