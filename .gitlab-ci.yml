@@ -16,13 +16,22 @@ stages:
   - integration-test
   - deploy
 
+.dle: &dle
+  rules:
+    - !reference [.only_dle_master, rules]
+    - !reference [.only_dle_feature, rules]
+    - !reference [.only_dle_tag_release, rules]
+    - !reference [.only_dle_tag_rc, rules]
+
 test:
+  <<: *dle
   stage: test
   script:
     - make test
   when: manual # TODO: remove
 
 lint:
+  <<: *dle
   stage: test
   script:
     - make lint
@@ -57,11 +66,7 @@ lint:
 
 ### Build binary.
 build-binary-alpine:
-  rules:
-    - !reference [.only_dle_master, rules]
-    - !reference [.only_dle_feature, rules]
-    - !reference [.only_dle_tag_release, rules]
-    - !reference [.only_dle_tag_rc, rules]
+  <<: *dle
   image: golang:1.17-alpine
   stage: build-binary
   artifacts:
