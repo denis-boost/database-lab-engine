@@ -41,6 +41,6 @@ build_basic_image_dev:
     REGISTRY: "${CI_REGISTRY}"
     DOCKER_NAME: "registry.gitlab.com/postgres-ai/database-lab/ce-ui"
     TAGS: '${DOCKER_NAME}:${CI_COMMIT_REF_SLUG},${DOCKER_NAME}:${CLEAN_TAG#"web/"}' # TODO: remove debug
-  before_script: #  TODO: remove debug
+  before_script: # TODO: remove debug
     - export CLEAN_TAG=web/0.0.1 # TODO: remove debug
   when: manual
