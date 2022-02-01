@@ -35,6 +35,7 @@ lint:
     - changes:
         - web/**/*
       when: never
+    - if: $CI_COMMIT_BRANCH
 
 .only_dle_tag_release: &only_tag_release
   rules:
