@@ -3,14 +3,14 @@
     - changes:
         - web/**/*
 
-check_code_style:
-  <<: *only_web
-  stage: test
-  image: node:16.13.0
-  script:
-    - npm --prefix web/ ci -ws
-    - npm --prefix web/ run lint -w packages/ce
-    - npm --prefix web/ run lint -w packages/platform
+#check_code_style:
+#  <<: *only_web
+#  stage: test
+#  image: node:16.13.0
+#  script:
+#    - npm --prefix web/ ci -ws
+#    - npm --prefix web/ run lint -w packages/ce
+#    - npm --prefix web/ run lint -w packages/platform
 
 include:
   - local: 'web/packages/ce/.gitlab-ci.yml'
