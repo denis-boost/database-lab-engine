@@ -5,8 +5,6 @@
 # Proprietary and confidential
 #--------------------------------------------------------------------------
 
-image: docker:18.09.7
-
 stages:
   - build
   - deploy
@@ -45,6 +43,7 @@ stages:
 # Jobs templates.
 .job_template: &build_definition
   stage: build
+  image: docker:20.10.12
   services:
     - docker:dind
   script:
@@ -52,7 +51,7 @@ stages:
     - echo Commit branch ${CI_COMMIT_BRANCH}
     - echo Default branch ${CI_DEFAULT_BRANCH}
 #    - apk add --no-cache bash
-#    - bash ./packages/platform/ci_docker_build_push.sh
+#    - bash ./web/packages/platform/ci_docker_build_push.sh
 
 .job_template: &deploy_definition
   stage: deploy
@@ -60,7 +59,7 @@ stages:
   script:
     - echo Deploy ${TAGS} # TODO: remove debug
     # Substitute env variables in deploy config.
-#    - bash ./packages/platform/do.sh subs_envs ./packages/platform/deploy/platform-console.yaml /tmp/platform-console.yaml
+#    - bash ./web/packages/platform/do.sh subs_envs ./web/packages/platform/deploy/platform-console.yaml /tmp/platform-console.yaml
     # Deploy to k8s cluster.
 #    - kubectl apply --filename /tmp/platform-console.yaml -n $NAMESPACE
 

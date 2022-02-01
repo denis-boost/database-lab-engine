@@ -21,7 +21,7 @@ stages:
   script:
     - echo ${TAGS} # TODO: remove debug
     - apk add --no-cache bash
-    - bash ./packages/ce/ci_docker_build_push.sh
+    - bash ./web/packages/ce/ci_docker_build_push.sh
 
 # Jobs.
 build_basic_image_release:
@@ -32,7 +32,9 @@ build_basic_image_release:
     REGISTRY_PASSWORD: "${DH_CI_REGISTRY_PASSWORD}"
     REGISTRY: "${DH_CI_REGISTRY}"
     DOCKER_NAME: "postgresai/ce-ui"
-    TAGS: '${DOCKER_NAME}:${CI_COMMIT_TAG#"web/"},${DOCKER_NAME}:latest'
+    TAGS: "${DOCKER_NAME}:${WEB_VERSION},${DOCKER_NAME}:latest"
+  before_script:
+    - export WEB_VERSION=$(echo ${CI_COMMIT_TAG#"web/"})
 
 build_basic_image_dev:
   <<: *build_definition
@@ -43,5 +45,7 @@ build_basic_image_dev:
     REGISTRY_PASSWORD: "${CI_REGISTRY_PASSWORD}"
     REGISTRY: "${CI_REGISTRY}"
     DOCKER_NAME: "registry.gitlab.com/postgres-ai/database-lab/ce-ui"
-    TAGS: '${DOCKER_NAME}:${CI_COMMIT_REF_SLUG},${DOCKER_NAME}:${CI_COMMIT_TAG#"web/"}' # TODO: remove debug
+    TAGS: "${DOCKER_NAME}:${CI_COMMIT_REF_SLUG},${DOCKER_NAME}:${WEB_VERSION}" # TODO: remove debug
+  before_script:
+    - export WEB_VERSION=$(echo ${CI_COMMIT_TAG#"web/"})
   when: manual
